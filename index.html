@@ -201,7 +201,7 @@ h1, h2, h3, h4 {
   background: transparent;
   border: none;
   border-radius: 0;
-  padding: 60px 0 48px;
+  padding: 32px 0 24px;
   margin-bottom: 0;
   display: flex;
   align-items: center;
@@ -218,8 +218,8 @@ h1, h2, h3, h4 {
   text-transform: uppercase;
 }
 .hero-content h1 {
-  font-size: 48px;
-  margin-bottom: 16px;
+  font-size: 36px;
+  margin-bottom: 12px;
   color: var(--text-primary);
   line-height: 1.1;
   letter-spacing: -0.03em;
@@ -227,8 +227,8 @@ h1, h2, h3, h4 {
 .hero-content p { color: var(--text-secondary); font-size: 17px; line-height: 1.7; max-width: 500px; }
 .hero-illustration {
   flex-shrink: 0;
-  width: 340px;
-  height: 340px;
+  width: 240px;
+  height: 240px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -386,16 +386,18 @@ h1, h2, h3, h4 {
 
 /* Dashboard Tabs */
 .dash-modules-section {
-  margin-bottom: 56px;
+  margin-bottom: 0;
+  flex: 1;
+  min-height: 0;
 }
 .dash-tabs {
   display: flex;
   gap: 0;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
   border-bottom: 2px solid var(--border);
 }
 .dash-tab {
-  padding: 14px 24px;
+  padding: 10px 24px;
   font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   font-weight: 700;
@@ -424,7 +426,7 @@ h1, h2, h3, h4 {
   border: none;
   border-radius: 0;
   padding: 20px 0;
-  height: 380px;
+  height: 310px;
   box-sizing: border-box;
 }
 .pathway-illustration {
@@ -442,7 +444,7 @@ h1, h2, h3, h4 {
 .readiness-grid {
   display: flex;
   position: relative;
-  height: 400px;
+  height: 320px;
   padding-left: 0;
 }
 .readiness-card {
@@ -456,7 +458,7 @@ h1, h2, h3, h4 {
   flex-direction: column;
   width: 280px;
   min-width: 280px;
-  height: 380px;
+  height: 310px;
   position: absolute;
   top: 0;
   box-shadow: 0 4px 20px rgba(0,0,0,0.06);
@@ -1451,7 +1453,7 @@ h1, h2, h3, h4 {
 </div>
 
 <!-- ===================== DASHBOARD ===================== -->
-<div class="panel active" id="panel-dashboard" style="max-height:calc(100vh - 100px); overflow:hidden;"
+<div class="panel active" id="panel-dashboard" style="height:calc(100vh - 100px); overflow:hidden; display:flex; flex-direction:column;"
 
   <!-- HERO: Skills & Interests -->
   <div class="hero-banner">
@@ -1471,8 +1473,8 @@ h1, h2, h3, h4 {
 
   <!-- TABBED MODULES SECTION -->
   <div class="dash-modules-section">
-    <h2 style="font-size:28px; margin-bottom:8px;">Your Career Toolkit</h2>
-    <p style="font-size:15px; color:var(--text-secondary); margin-bottom:24px;">Build your skills, explore careers, and find your match.</p>
+    <h2 style="font-size:24px; margin-bottom:4px;">Your Career Toolkit</h2>
+    <p style="font-size:14px; color:var(--text-secondary); margin-bottom:16px;">Build your skills, explore careers, and find your match.</p>
 
     <div class="dash-tabs">
       <button class="dash-tab active" onclick="switchDashTab('readiness')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14" height="18" width="18" style="vertical-align:-3px;margin-right:6px;display:inline;"><path fill="#0f8323" d="M12.5 12.375c0 0.2652 -0.1054 0.5196 -0.2929 0.7071s-0.4419 0.2929 -0.7071 0.2929h-9c-0.26522 0 -0.51957 -0.1054 -0.70711 -0.2929 -0.18753 -0.1875 -0.29289 -0.4419 -0.29289 -0.7071V1.625c0 -0.26522 0.10536 -0.51957 0.29289 -0.707107C1.98043 0.730357 2.23478 0.625 2.5 0.625h5.58579c0.26521 0 0.51957 0.105357 0.7071 0.292893L12.2071 4.33211c0.1875 0.18753 0.2929 0.44189 0.2929 0.7071V12.375Z" stroke-width="1"></path><path fill="#0c098c" fill-rule="evenodd" d="M2.5 1.25c-0.09946 0 -0.19484 0.03951 -0.26517 0.10983 -0.07032 0.07033 -0.10983 0.16571 -0.10983 0.26517v10.75c0 0.0995 0.03951 0.1948 0.10983 0.2652 0.07033 0.0703 0.16571 0.1098 0.26517 0.1098h9c0.0995 0 0.1948 -0.0395 0.2652 -0.1098 0.0703 -0.0704 0.1098 -0.1657 0.1098 -0.2652V5.03921c0 -0.09945 -0.0395 -0.19484 -0.1098 -0.26516L8.35095 1.35983C8.28063 1.28951 8.18524 1.25 8.08579 1.25H2.5ZM1.35095 0.475951C1.6557 0.171205 2.06902 0 2.5 0h5.58579c0.43097 0 0.8443 0.171205 1.14904 0.475951L12.649 3.89017c0.3048 0.30474 0.476 0.71807 0.476 1.14904V12.375c0 0.431 -0.1712 0.8443 -0.476 1.149 -0.3047 0.3048 -0.718 0.476 -1.149 0.476h-9c-0.43098 0 -0.8443 -0.1712 -1.14905 -0.476C1.0462 13.2193 0.875 12.806 0.875 12.375V1.625c0 -0.43098 0.1712 -0.844302 0.47595 -1.149049Zm4.7687 4.270699c0.32202 -0.25641 0.52874 -0.65191 0.52874 -1.09604 0 -0.7734 -0.62696 -1.40037 -1.40037 -1.40037 -0.7734 0 -1.40036 0.62697 -1.40036 1.40037 0 0.44424 0.20685 0.84016 0.52949 1.0967 -0.09174 0.04288 -0.18111 0.09256 -0.26752 0.1488 -0.34477 0.22442 -0.62977 0.54502 -0.83091 0.92759 -0.04074 0.0775 -0.03798 0.17066 0.00729 0.2456s0.12644 0.12074 0.21399 0.12074h3.49822c0.08755 0 0.16872 -0.0458 0.21399 -0.12074 0.04527 -0.07494 0.04803 -0.1681 0.00729 -0.2456 -0.20114 -0.38257 -0.48614 -0.70317 -0.83092 -0.92759 -0.08685 -0.05653 -0.17669 -0.10643 -0.26893 -0.14946ZM2.875 8.5c0 -0.34518 0.27982 -0.625 0.625 -0.625h7c0.3452 0 0.625 0.27982 0.625 0.625s-0.2798 0.625 -0.625 0.625h-7c-0.34518 0 -0.625 -0.27982 -0.625 -0.625Zm0.625 1.875c-0.34518 0 -0.625 0.2798 -0.625 0.625s0.27982 0.625 0.625 0.625h4c0.34518 0 0.625 -0.2798 0.625 -0.625s-0.27982 -0.625 -0.625 -0.625h-4Z" clip-rule="evenodd" stroke-width="1"></path></svg>Career Readiness</button>
