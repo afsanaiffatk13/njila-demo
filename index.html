@@ -195,6 +195,12 @@ h1, h2, h3, h4 {
 /* Panels */
 .panel { display: none; padding: 0 48px 48px; max-width: 1200px; margin: 0 auto; }
 .panel.active { display: block; }
+#panel-dashboard.active {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 100px);
+  overflow: hidden;
+}
 
 /* Hero Banner */
 .hero-banner {
@@ -1453,7 +1459,7 @@ h1, h2, h3, h4 {
 </div>
 
 <!-- ===================== DASHBOARD ===================== -->
-<div class="panel active" id="panel-dashboard" style="height:calc(100vh - 100px); overflow:hidden; display:flex; flex-direction:column;"
+<div class="panel active" id="panel-dashboard"
 
   <!-- HERO: Skills & Interests -->
   <div class="hero-banner">
