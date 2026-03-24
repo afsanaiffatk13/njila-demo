@@ -450,8 +450,22 @@ h1, h2, h3, h4 {
 .readiness-grid {
   display: flex;
   position: relative;
-  height: 320px;
-  padding-left: 0;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
+  padding: 24px 0;
+}
+/* Dotted connector line behind cards */
+.readiness-grid::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  right: 5%;
+  height: 3px;
+  border-top: 3px dashed #ccc;
+  z-index: 0;
+  transform: translateY(-50%);
 }
 .readiness-card {
   background: var(--white);
@@ -462,22 +476,17 @@ h1, h2, h3, h4 {
   transition: all 0.35s ease;
   display: flex;
   flex-direction: column;
-  width: 280px;
-  min-width: 280px;
-  height: 310px;
-  position: absolute;
-  top: 0;
+  width: 18%;
+  min-width: 0;
+  flex-shrink: 1;
+  position: relative;
+  z-index: 1;
   box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  margin: 0 8px;
 }
-.readiness-card:nth-child(1) { left: 0; z-index: 4; }
-.readiness-card:nth-child(2) { left: 220px; z-index: 5; }
-.readiness-card:nth-child(3) { left: 440px; z-index: 3; }
-.readiness-card:nth-child(4) { left: 660px; z-index: 2; }
-.readiness-card:nth-child(5) { left: 880px; z-index: 1; }
 .readiness-card:hover {
   border-color: var(--orange);
-  transform: scale(1.02) translateY(-6px);
-  opacity: 1;
+  transform: scale(1.04) translateY(-4px);
   z-index: 10;
   box-shadow: 0 16px 40px rgba(0,0,0,0.12);
 }
@@ -486,14 +495,14 @@ h1, h2, h3, h4 {
 }
 .readiness-card img {
   width: 100%;
-  height: 140px;
+  height: 100px;
   object-fit: contain;
   background: var(--bg);
-  padding: 16px;
+  padding: 10px;
   flex-shrink: 0;
 }
 .readiness-card-body {
-  padding: 14px 18px;
+  padding: 10px 12px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -505,13 +514,24 @@ h1, h2, h3, h4 {
   align-self: flex-start;
 }
 .readiness-card-body h4 {
-  font-size: 14px;
+  font-size: 13px;
   margin-bottom: 4px;
 }
 .readiness-card-body p {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.4;
+}
+/* Locked/unopened cards: grayscale */
+.readiness-card.locked {
+  filter: grayscale(100%);
+  opacity: 0.75;
+}
+.readiness-card.locked:hover {
+  filter: grayscale(80%);
+  opacity: 0.85;
+  transform: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
 }
 .readiness-status {
   display: inline-flex;
@@ -544,12 +564,6 @@ h1, h2, h3, h4 {
 .btn-quiz:disabled:hover { background: transparent; color: #ccc; }
 
 .readiness-status.locked { background: #f0f0f0; color: #aaa; }
-.readiness-card.locked {
-  cursor: default;
-}
-.readiness-card.locked:hover {
-  border-color: var(--border);
-}
 
 /* Horizon CTA */
 .horizon-cta {
@@ -572,6 +586,163 @@ h1, h2, h3, h4 {
   height: 100%;
   object-fit: contain;
   filter: brightness(1.15);
+}
+
+/* ========== JOB MATCHING PAGE ========== */
+.jobs-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.jobs-stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+}
+.jobs-stat-card .js-value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--text-primary);
+  line-height: 1;
+}
+.jobs-stat-card .js-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-top: 6px;
+}
+.jobs-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 24px;
+  border-bottom: 2px solid var(--border);
+}
+.jobs-tab {
+  padding: 10px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.jobs-tab:hover { color: var(--text-primary); }
+.jobs-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+.jobs-tab-content { display: none; }
+.jobs-tab-content.active { display: block; }
+
+.job-list { display: flex; flex-direction: column; gap: 12px; }
+.job-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.job-card:hover {
+  border-color: var(--text-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+.job-card-match {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 15px;
+}
+.job-card-match.high { background: var(--green-bg); color: var(--green); }
+.job-card-match.med { background: var(--orange-bg); color: var(--orange); }
+.job-card-match.low { background: var(--red-bg); color: var(--red); }
+.job-card-body { flex: 1; min-width: 0; }
+.job-card-body h4 { font-size: 15px; margin-bottom: 4px; }
+.job-card-body .job-company { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+.job-card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.job-tag {
+  font-size: 11px; font-weight: 500; padding: 4px 10px;
+  border-radius: 50px; background: var(--bg); color: var(--text-secondary);
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+.job-tag.match { background: var(--green-bg); color: var(--green); }
+.job-tag.gap { background: var(--orange-bg); color: var(--orange); }
+.job-card-meta {
+  display: flex; align-items: center; gap: 16px;
+  margin-top: 10px; font-size: 12px; color: var(--text-secondary);
+}
+.job-card-meta span { display: flex; align-items: center; gap: 4px; }
+.job-card-meta svg { width: 14px; height: 14px; }
+
+/* Job detail modal */
+.job-detail-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4); z-index: 10001;
+  justify-content: center; align-items: flex-start;
+  padding: 40px 20px; overflow-y: auto;
+}
+.job-detail-overlay.show { display: flex; }
+.job-detail-modal {
+  background: var(--white); border-radius: var(--radius-lg);
+  max-width: 640px; width: 100%; padding: 36px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.15); position: relative;
+}
+.job-detail-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 32px; height: 32px; border-radius: 8px;
+  border: none; background: var(--bg); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary);
+}
+.job-detail-close:hover { background: var(--border); }
+.match-bar-wrap { margin-bottom: 10px; }
+.match-bar-label {
+  display: flex; justify-content: space-between;
+  font-size: 12px; margin-bottom: 4px;
+}
+.match-bar-label span:first-child { font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; }
+.match-bar-label span:last-child { font-family: 'IBM Plex Mono', monospace; font-weight: 600; }
+.match-bar {
+  height: 8px; background: var(--border);
+  border-radius: 100px; overflow: hidden;
+}
+.match-bar-fill {
+  height: 100%; border-radius: 100px;
+  transition: width 0.4s ease;
+}
+
+/* Browse jobs filter bar */
+.browse-filter-bar {
+  display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+}
+.browse-filter-bar select,
+.browse-filter-bar input {
+  padding: 8px 14px; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif;
+  background: var(--white); color: var(--text-primary); outline: none;
+}
+.browse-filter-bar select { min-width: 140px; }
+.browse-filter-bar input { flex: 1; min-width: 180px; }
+.browse-filter-bar select:focus,
+.browse-filter-bar input:focus { border-color: var(--text-primary); }
+
+@media (max-width: 768px) {
+  .jobs-stats { grid-template-columns: repeat(2, 1fr); }
+  .job-card { flex-direction: column; }
+  .job-card-match { width: 40px; height: 40px; font-size: 13px; }
+  .browse-filter-bar { flex-direction: column; }
 }
 
 .continue-link {
@@ -1220,13 +1391,12 @@ h1, h2, h3, h4 {
   .hero-illustration { width: 200px; height: 200px; }
   .hero-content h1 { font-size: 28px; }
   .hero-content p { max-width: 100%; font-size: 14px; }
-  .readiness-grid { height: 280px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .readiness-card { width: 220px; min-width: 220px; height: 260px; }
-  .readiness-card:nth-child(1) { left: 0; }
-  .readiness-card:nth-child(2) { left: 160px; }
-  .readiness-card:nth-child(3) { left: 320px; }
-  .readiness-card:nth-child(4) { left: 480px; }
-  .readiness-card:nth-child(5) { left: 640px; }
+  .readiness-grid { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; }
+  .readiness-card { width: 160px; min-width: 160px; margin: 0 4px; }
+  .readiness-card img { height: 80px; padding: 8px; }
+  .readiness-card-body { padding: 8px 10px; }
+  .readiness-card-body h4 { font-size: 12px; }
+  .readiness-card-body p { font-size: 10px; }
   .pathway-card { flex-direction: column; padding: 24px; gap: 24px; }
   .pathway-illustration { width: 100%; height: 160px; }
   .horizon-cta { flex-direction: column; padding: 32px 24px; text-align: center; }
@@ -1242,11 +1412,8 @@ h1, h2, h3, h4 {
   .burger-btn { display: flex; }
 }
 @media (max-width: 480px) {
-  .readiness-card { width: 200px; min-width: 200px; }
-  .readiness-card:nth-child(2) { left: 140px; }
-  .readiness-card:nth-child(3) { left: 280px; }
-  .readiness-card:nth-child(4) { left: 420px; }
-  .readiness-card:nth-child(5) { left: 560px; }
+  .readiness-card { width: 140px; min-width: 140px; margin: 0 3px; }
+  .readiness-card img { height: 70px; }
   .hero-content h1 { font-size: 24px; }
   .dash-progress { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .progress-stat-value { font-size: 28px; }
@@ -2043,7 +2210,7 @@ h1, h2, h3, h4 {
   <div class="hero-banner">
     <div class="hero-content">
       <p class="hero-greeting">Welcome back, Chanda</p>
-      <h1>Discover Your Skills & Interests</h1>
+      <h1>Step 1: Discover Your Skills & Interests</h1>
       <p>Chat with Njila to uncover what you're great at — from your studies, work experience, and everyday life. Your skills are the foundation for everything else.</p>
       <div style="display:flex; gap:12px; align-items:center; margin-top:24px;">
         <button class="btn-primary" onclick="showPage('skills')" style="font-size:15px; padding:16px 36px;">Start Discovery Chat</button>
@@ -2101,7 +2268,6 @@ h1, h2, h3, h4 {
             <span class="readiness-status in-progress"><i data-lucide="loader" style="width:12px;height:12px;"></i> In Progress</span>
             <h4>CV Development</h4>
             <p>Structure a professional CV for entry-level or apprenticeship roles.</p>
-            <button class="btn-quiz">Take the Quiz</button>
           </div>
         </div>
         <div class="readiness-card locked">
@@ -2110,7 +2276,6 @@ h1, h2, h3, h4 {
             <span class="readiness-status locked"><i data-lucide="lock" style="width:12px;height:12px;"></i> Locked</span>
             <h4>Cover Letter & Motivation</h4>
             <p>Write role-specific cover letters that connect your background to the opportunity.</p>
-            <button class="btn-quiz" disabled>Take the Quiz</button>
           </div>
         </div>
         <div class="readiness-card locked">
@@ -2119,7 +2284,6 @@ h1, h2, h3, h4 {
             <span class="readiness-status locked"><i data-lucide="lock" style="width:12px;height:12px;"></i> Locked</span>
             <h4>Interview Preparation</h4>
             <p>Practise the STAR method and build confidence through mock interviews.</p>
-            <button class="btn-quiz" disabled>Take the Quiz</button>
           </div>
         </div>
         <div class="readiness-card locked">
@@ -2128,7 +2292,6 @@ h1, h2, h3, h4 {
             <span class="readiness-status locked"><i data-lucide="lock" style="width:12px;height:12px;"></i> Locked</span>
             <h4>Workplace Readiness</h4>
             <p>Build communication, problem-solving, and teamwork skills.</p>
-            <button class="btn-quiz" disabled>Take the Quiz</button>
           </div>
         </div>
       </div>
@@ -2193,16 +2356,277 @@ h1, h2, h3, h4 {
   </div>
 </div>
 
-<!-- ===================== BROWSE JOBS ===================== -->
+<!-- ===================== JOB MATCHING & ANALYTICS ===================== -->
 <div class="panel" id="panel-jobs">
-  <p style="color:var(--text-secondary); margin-bottom:20px;">Skills-based job matching and labour market analytics for Zambia.</p>
 
-  <!-- IFRAME PLACEHOLDER: Replace the src below with the Horizon demo URL -->
-  <div style="background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px; padding:48px 24px; text-align:center;">
-    <i data-lucide="monitor" style="width:48px; height:48px; color:var(--text-secondary);"></i>
-    <p style="font-size:15px; font-weight:600; color:var(--text-primary);">Horizon Demo</p>
-    <p style="font-size:13px; color:var(--text-secondary); max-width:400px;">This section will embed the Tabiya Horizon job matching and analytics dashboard. Replace this placeholder with an iframe pointing to the Horizon demo URL.</p>
-    <code style="font-size:12px; color:var(--text-secondary); background:var(--white); padding:8px 16px; border-radius:4px; border:1px solid var(--border);">&lt;iframe src="HORIZON_DEMO_URL" ...&gt;</code>
+  <!-- Student profile summary -->
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:24px; padding-bottom:24px; border-bottom:1px solid var(--border);">
+    <div style="width:56px; height:56px; border-radius:50%; background:var(--green); color:var(--white); display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; font-family:'IBM Plex Mono',monospace; flex-shrink:0;">CM</div>
+    <div>
+      <h3 style="font-size:18px; margin-bottom:2px;">Chanda Mulenga</h3>
+      <p style="font-size:14px; color:var(--text-secondary);">2nd Year Electrical Engineering &bull; Evelyn Hone College, Lusaka</p>
+      <p style="font-size:13px; color:var(--green); font-weight:600; margin-top:4px;"><i data-lucide="badge-check" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i>TEVETA Craft Certificate &mdash; ZQF-4 (In Progress)</p>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="jobs-tabs">
+    <button class="jobs-tab active" onclick="switchJobsTab('browse', this)">Browse Jobs</button>
+    <button class="jobs-tab" onclick="switchJobsTab('matched', this)">Matched for You</button>
+  </div>
+
+  <!-- TAB 2: Matched Jobs -->
+  <div class="jobs-tab-content" id="jobs-tab-matched">
+    <div class="job-list">
+
+      <div class="job-card" onclick="openJobDetail(1)">
+        <div class="job-card-match high">100%</div>
+        <div class="job-card-body">
+          <h4>Electrician</h4>
+          <div class="job-company">Silverlands Agriculture Services Limited &bull; Mkushi &bull; Central</div>
+          <div class="job-card-tags">
+            <span class="job-tag match">electrical engineering</span>
+          </div>
+          <div class="job-card-meta">
+            <span><i data-lucide="clock"></i> 12 Mar 2026</span>
+            <span><i data-lucide="briefcase"></i> Full-time</span>
+            <span><i data-lucide="zap"></i> Electricity, Gas &amp; AC Supply</span>
+            <span style="font-weight:600; color:var(--green);">1 of 1 skills matched</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="job-card" onclick="openJobDetail(6)">
+        <div class="job-card-match high">100%</div>
+        <div class="job-card-body">
+          <h4>Auto Electrician</h4>
+          <div class="job-company">Andaxin International Logistics Zambia Ltd &bull; Chambishi &bull; Copperbelt</div>
+          <div class="job-card-tags">
+            <span class="job-tag match">electrical engineering</span>
+          </div>
+          <div class="job-card-meta">
+            <span><i data-lucide="clock"></i> 25 Feb 2026</span>
+            <span><i data-lucide="briefcase"></i> Full-time</span>
+            <span><i data-lucide="zap"></i> Electricity, Gas &amp; AC Supply</span>
+            <span style="font-weight:600; color:var(--green);">1 of 1 skills matched</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="job-card" onclick="openJobDetail(3)">
+        <div class="job-card-match med">33%</div>
+        <div class="job-card-body">
+          <h4>Electrical Technician</h4>
+          <div class="job-company">Silondwa Engineering Limited &bull; Masaiti / Ndola &bull; Copperbelt</div>
+          <div class="job-card-tags">
+            <span class="job-tag match">solve problems</span>
+            <span class="job-tag match">technical drawings</span>
+            <span class="job-tag gap">use specialised tools in electric repairs</span>
+            <span class="job-tag gap">maintain electrical equipment</span>
+          </div>
+          <div class="job-card-meta">
+            <span><i data-lucide="clock"></i> 19 Feb 2026</span>
+            <span><i data-lucide="briefcase"></i> Contract</span>
+            <span><i data-lucide="zap"></i> Electricity, Gas &amp; AC Supply</span>
+            <span style="font-weight:600; color:var(--orange);">2 of 6 skills matched</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="job-card" onclick="openJobDetail(0)">
+        <div class="job-card-match med">22%</div>
+        <div class="job-card-body">
+          <h4>Electrical Trainees</h4>
+          <div class="job-company">Ecovolt Innovations Ltd &bull; Kaoma, Nkeyema &amp; Luampa &bull; Western</div>
+          <div class="job-card-tags">
+            <span class="job-tag match">electrical engineering</span>
+            <span class="job-tag match">teamwork principles</span>
+            <span class="job-tag gap">solar energy</span>
+            <span class="job-tag gap">design electronic systems</span>
+            <span class="job-tag gap">maintain solar energy systems</span>
+          </div>
+          <div class="job-card-meta">
+            <span><i data-lucide="clock"></i> 1 Mar 2026</span>
+            <span><i data-lucide="briefcase"></i> Internship</span>
+            <span><i data-lucide="zap"></i> Electricity, Gas &amp; AC Supply</span>
+            <span style="font-weight:600; color:var(--orange);">2 of 9 skills matched</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="job-card" onclick="openJobDetail(4)">
+        <div class="job-card-match low">20%</div>
+        <div class="job-card-body">
+          <h4>Electrician</h4>
+          <div class="job-company">Handyman&rsquo;s Lime Ltd &bull; Ndola &bull; Copperbelt</div>
+          <div class="job-card-tags">
+            <span class="job-tag match">teamwork principles</span>
+            <span class="job-tag gap">marketing management</span>
+            <span class="job-tag gap">mining engineering</span>
+            <span class="job-tag gap">automation technology</span>
+          </div>
+          <div class="job-card-meta">
+            <span><i data-lucide="clock"></i> 24 Feb 2026</span>
+            <span><i data-lucide="briefcase"></i> Contract</span>
+            <span><i data-lucide="zap"></i> Electricity, Gas &amp; AC Supply</span>
+            <span style="font-weight:600; color:var(--red);">1 of 5 skills matched</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="job-card" onclick="openJobDetail(2)">
+        <div class="job-card-match low">20%</div>
+        <div class="job-card-body">
+          <h4>Electrician Wanted</h4>
+          <div class="job-company">Forlan Hire Limited &bull; Chudleigh, Lusaka &bull; Lusaka</div>
+          <div class="job-card-tags">
+            <span class="job-tag match">write English</span>
+            <span class="job-tag gap">identify talent</span>
+            <span class="job-tag gap">repair vehicle electrical systems</span>
+            <span class="job-tag gap">develop reporting software</span>
+          </div>
+          <div class="job-card-meta">
+            <span><i data-lucide="clock"></i> 1 Mar 2026</span>
+            <span><i data-lucide="briefcase"></i> Full-time</span>
+            <span><i data-lucide="zap"></i> Electricity, Gas &amp; AC Supply</span>
+            <span style="font-weight:600; color:var(--red);">1 of 5 skills matched</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="job-card" onclick="openJobDetail(5)">
+        <div class="job-card-match low">20%</div>
+        <div class="job-card-body">
+          <h4>Assistant Miller &amp; Milling Electrician</h4>
+          <div class="job-company">Kings Chemicals Limited &bull; Lusaka &bull; Lusaka</div>
+          <div class="job-card-tags">
+            <span class="job-tag match">communication</span>
+            <span class="job-tag match">teamwork principles</span>
+            <span class="job-tag gap">milling machines</span>
+            <span class="job-tag gap">grade wheat for milling</span>
+            <span class="job-tag gap">design electrical systems</span>
+          </div>
+          <div class="job-card-meta">
+            <span><i data-lucide="clock"></i> 14 Mar 2026</span>
+            <span><i data-lucide="briefcase"></i> Full-time</span>
+            <span><i data-lucide="building-2"></i> Manufacturing</span>
+            <span style="font-weight:600; color:var(--red);">2 of 10 skills matched</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="job-card" onclick="openJobDetail(7)">
+        <div class="job-card-match low">10%</div>
+        <div class="job-card-body">
+          <h4>Instrumentation Technician</h4>
+          <div class="job-company">Silondwa Engineering Limited &bull; Ndola &bull; Copperbelt</div>
+          <div class="job-card-tags">
+            <span class="job-tag match">solve problems</span>
+            <span class="job-tag gap">develop calibration procedures</span>
+            <span class="job-tag gap">inspect industrial equipment</span>
+            <span class="job-tag gap">maintain air conditioning systems</span>
+          </div>
+          <div class="job-card-meta">
+            <span><i data-lucide="clock"></i> 26 Feb 2026</span>
+            <span><i data-lucide="briefcase"></i> Contract</span>
+            <span><i data-lucide="hard-hat"></i> Construction</span>
+            <span style="font-weight:600; color:var(--red);">1 of 10 skills matched</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAB 1: Browse Jobs -->
+  <div class="jobs-tab-content active" id="jobs-tab-browse">
+    <div class="browse-filter-bar">
+      <input type="text" id="browse-search" placeholder="Search job titles or companies..." oninput="filterBrowseJobs()">
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="data-table" id="browse-jobs-table">
+        <thead>
+          <tr>
+            <th>Job Title</th>
+            <th>Company</th>
+            <th>Sector</th>
+            <th>Work Domain</th>
+            <th>Province</th>
+            <th>Type</th>
+            <th>Posted</th>
+          </tr>
+          <tr class="filter-row" style="background:#fafaf7;">
+            <th colspan="2"></th>
+            <th><select id="browse-sector" onchange="filterBrowseJobs()" style="width:100%;padding:4px 6px;font-size:11px;border:1px solid var(--border);border-radius:4px;background:var(--white);font-family:'Inter',sans-serif;">
+              <option value="">All</option>
+              <option>Accommodation & Food Service</option>
+              <option>Administrative & Support Services</option>
+              <option>Agriculture, Forestry & Fishing</option>
+              <option>Construction</option>
+              <option>Financial & Insurance Activities</option>
+              <option>Human Health & Social Work</option>
+              <option>Information & Communication</option>
+              <option>Manufacturing</option>
+              <option>Mining & Quarrying</option>
+              <option>Other Service Activities</option>
+              <option>Professional, Scientific & Technical</option>
+              <option>Transportation & Storage</option>
+              <option>Water Supply, Sewerage & Waste</option>
+              <option>Wholesale & Retail Trade</option>
+            </select></th>
+            <th><select id="browse-domain" onchange="filterBrowseJobs()" style="width:100%;padding:4px 6px;font-size:11px;border:1px solid var(--border);border-radius:4px;background:var(--white);font-family:'Inter',sans-serif;">
+              <option value="">All</option>
+              <option>Accommodation & Food Service</option>
+              <option>Administrative & Support Services</option>
+              <option>Agriculture, Forestry & Fishing</option>
+              <option>Construction</option>
+              <option>Electricity, Gas & AC Supply</option>
+              <option>Financial & Insurance Activities</option>
+              <option>Information & Communication</option>
+              <option>Manufacturing</option>
+              <option>Mining & Quarrying</option>
+              <option>Other Service Activities</option>
+              <option>Professional, Scientific & Technical</option>
+              <option>Transportation & Storage</option>
+              <option>Water Supply, Sewerage & Waste</option>
+              <option>Wholesale & Retail Trade</option>
+            </select></th>
+            <th><select id="browse-province" onchange="filterBrowseJobs()" style="width:100%;padding:4px 6px;font-size:11px;border:1px solid var(--border);border-radius:4px;background:var(--white);font-family:'Inter',sans-serif;">
+              <option value="">All</option>
+              <option>Central</option>
+              <option>Copperbelt</option>
+              <option>Eastern</option>
+              <option>Luapula</option>
+              <option>Lusaka</option>
+              <option>Muchinga</option>
+              <option>Multiple</option>
+              <option>National/Remote</option>
+              <option>North Western</option>
+              <option>Northern</option>
+              <option>Southern</option>
+              <option>Western</option>
+            </select></th>
+            <th><select id="browse-type" onchange="filterBrowseJobs()" style="width:100%;padding:4px 6px;font-size:11px;border:1px solid var(--border);border-radius:4px;background:var(--white);font-family:'Inter',sans-serif;">
+              <option value="">All</option>
+              <option>Full-time</option>
+              <option>Contract</option>
+              <option>Internship</option>
+              <option>Temporary</option>
+            </select></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="browse-jobs-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Job Detail Modal -->
+<div class="job-detail-overlay" id="job-detail-overlay" onclick="if(event.target===this)closeJobDetail()">
+  <div class="job-detail-modal">
+    <button class="job-detail-close" onclick="closeJobDetail()"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
+    <div id="job-detail-content"></div>
   </div>
 </div>
 
@@ -3131,7 +3555,8 @@ const pageTitles = {
 const pageSubtitles = {
   skills: 'Uncover your skills and interests',
   interview: 'Build the skills employers look for beyond your technical training',
-  career: 'Explore career pathways and progression routes in Zambia'
+  career: 'Explore career pathways and progression routes in Zambia',
+  jobs: 'Find jobs that match your skills across Zambia'
 };
 
 const chatPages = ['career', 'skills'];
@@ -3156,6 +3581,210 @@ function switchDashTab(tab) {
   event.target.classList.add('active');
   document.getElementById('dash-tab-' + tab).classList.add('active');
 }
+
+/* ========== JOB MATCHING — TAB SWITCHING, DETAIL MODAL, BROWSE TABLE ========== */
+function switchJobsTab(tab, btn) {
+  document.querySelectorAll('.jobs-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.jobs-tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('jobs-tab-' + tab).classList.add('active');
+}
+
+const jobDetails = [
+  {
+    title: 'Electrical Trainees', company: 'Ecovolt Innovations Ltd', location: 'Kaoma, Nkeyema & Luampa', province: 'Western', type: 'Internship',
+    posted: '1 Mar 2026', domain: 'Electricity, Gas, Steam & AC Supply', sector: 'Construction', zqf: 'Skills Award / Grade 9',
+    desc: 'Join Ecovolt\'s trainee programme installing solar-powered electrical systems in Western Province. Work in teams across Kaoma, Nkeyema, and Luampa districts gaining hands-on experience with renewable energy installations.',
+    matched: ['electrical engineering', 'teamwork principles'],
+    gaps: ['solar energy', 'work efficiently', 'motivate others', 'design electronic systems', 'design circuits using CAD', 'ICT system programming', 'maintain solar energy systems']
+  },
+  {
+    title: 'Electrician', company: 'Silverlands Agriculture Services Limited', location: 'Mkushi', province: 'Central', type: 'Full-time',
+    posted: '12 Mar 2026', domain: 'Electricity, Gas, Steam & AC Supply', sector: 'Agriculture, Forestry & Fishing', zqf: 'Craft Certificate / Grade 12',
+    desc: 'Maintain and repair electrical systems across Silverlands\' large-scale farming operations in Mkushi. Responsible for irrigation pump motors, farm building wiring, and equipment electrical fault diagnosis.',
+    matched: ['electrical engineering'],
+    gaps: []
+  },
+  {
+    title: 'Electrician Wanted', company: 'Forlan Hire Limited', location: 'Chudleigh, Lusaka', province: 'Lusaka', type: 'Full-time',
+    posted: '1 Mar 2026', domain: 'Electricity, Gas, Steam & AC Supply', sector: 'Human Health & Social Work', zqf: 'Craft Certificate / Grade 12',
+    desc: 'Handle all electrical maintenance and installations for Forlan Hire\'s facility in Chudleigh, Lusaka. Duties include fault-finding, wiring, generator maintenance, and coordinating with external contractors.',
+    matched: ['write English'],
+    gaps: ['identify talent', 'repair vehicle electrical systems', 'inspect for faults in the vehicle\'s electric system', 'develop reporting software']
+  },
+  {
+    title: 'Electrical Technician', company: 'Silondwa Engineering Limited', location: 'Masaiti / Ndola', province: 'Copperbelt', type: 'Contract',
+    posted: '19 Feb 2026', domain: 'Electricity, Gas, Steam & AC Supply', sector: 'Construction', zqf: 'Craft Certificate / Grade 12',
+    desc: 'Provide electrical technical support on construction and industrial projects across the Copperbelt. Includes cable installation, panel wiring, equipment commissioning, and maintenance reporting.',
+    matched: ['solve problems', 'technical drawings'],
+    gaps: ['use specialised tools in electric repairs', 'develop preventive maintenance procedures for instruments', 'manufacturing plant equipment', 'maintain electrical equipment']
+  },
+  {
+    title: 'Electrician', company: 'Handyman\'s Lime Ltd', location: 'Ndola', province: 'Copperbelt', type: 'Contract',
+    posted: '24 Feb 2026', domain: 'Electricity, Gas, Steam & AC Supply', sector: 'Mining & Quarrying', zqf: 'Craft Certificate / Grade 12',
+    desc: 'Maintain electrical infrastructure at Handyman\'s Lime production facility in Ndola. Work in a quarrying/construction environment handling power distribution, motor controls, and site lighting systems.',
+    matched: ['teamwork principles'],
+    gaps: ['marketing management', 'mining engineering', 'lead a team', 'automation technology']
+  },
+  {
+    title: 'Assistant Miller & Milling Electrician', company: 'Kings Chemicals Limited', location: 'Lusaka', province: 'Lusaka', type: 'Full-time',
+    posted: '14 Mar 2026', domain: 'Manufacturing', sector: 'Manufacturing', zqf: 'Craft Certificate / Grade 12',
+    desc: 'Maintain and troubleshoot electrical systems on milling and chemical processing equipment. Ensure production line uptime through preventive maintenance and rapid fault resolution.',
+    matched: ['communication', 'teamwork principles'],
+    gaps: ['milling machines', 'grade wheat for milling', 'monitor manufacturing quality standards', 'supervision of persons', 'design electrical systems', 'maintenance operations', 'ensure equipment maintenance', 'work in shifts']
+  },
+  {
+    title: 'Auto Electrician', company: 'Andaxin International Logistics Zambia Ltd', location: 'Chambishi', province: 'Copperbelt', type: 'Full-time',
+    posted: '25 Feb 2026', domain: 'Electricity, Gas, Steam & AC Supply', sector: 'Transportation & Storage', zqf: 'Craft Certificate / Grade 12',
+    desc: 'Diagnose and repair electrical faults on the logistics fleet including trucks, trailers, and material handling equipment. Maintain vehicle wiring, lighting, starter motors, and charging systems.',
+    matched: ['electrical engineering'],
+    gaps: []
+  },
+  {
+    title: 'Instrumentation Technician', company: 'Silondwa Engineering Limited', location: 'Ndola', province: 'Copperbelt', type: 'Contract',
+    posted: '26 Feb 2026', domain: 'Construction', sector: 'Construction', zqf: 'Craft Certificate / Grade 12',
+    desc: 'Install, calibrate, and maintain industrial instrumentation on process plant projects. Work with sensors, transmitters, and control valves. Support commissioning and produce calibration records.',
+    matched: ['solve problems'],
+    gaps: ['develop calibration procedures', 'agree on repair arrangements', 'inspect industrial equipment', 'advise on equipment maintenance', 'develop measuring equipment', 'perform maintenance on installed equipment', 'maintain air conditioning systems', 'develop preventive maintenance procedures for instruments', 'manage air quality']
+  }
+];
+
+function openJobDetail(idx) {
+  var j = jobDetails[idx];
+  var total = j.matched.length + j.gaps.length;
+  var matchPct = Math.round((j.matched.length / total) * 100);
+  var matchColor = matchPct >= 80 ? 'var(--green)' : 'var(--orange)';
+  var html = '<div style="margin-bottom:20px;">' +
+    '<h3 style="font-size:20px; margin-bottom:4px;">' + j.title + '</h3>' +
+    '<p style="font-size:14px; color:var(--text-secondary);">' + j.company + ' &bull; ' + j.location + ', ' + j.province + '</p>' +
+    '<div style="display:flex; flex-wrap:wrap; gap:16px; margin-top:10px; font-size:12px; color:var(--text-secondary);">' +
+    '<span>' + j.type + '</span><span>Posted ' + j.posted + '</span><span>Work Domain: ' + j.domain + '</span>' +
+    (j.zqf ? '<span>Min. Qual: ' + j.zqf + '</span>' : '') + '</div>' +
+    '</div>' +
+    '<p style="font-size:14px; line-height:1.6; color:var(--text-secondary); margin-bottom:24px;">' + j.desc + '</p>' +
+    '<div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">' +
+    '<div style="width:56px;height:56px;border-radius:50%;background:' + (matchPct >= 80 ? 'var(--green-bg)' : 'var(--orange-bg)') + ';display:flex;align-items:center;justify-content:center;font-family:IBM Plex Mono,monospace;font-weight:700;font-size:18px;color:' + matchColor + ';">' + matchPct + '%</div>' +
+    '<div><div style="font-size:15px;font-weight:700;">Skill Match</div><div style="font-size:12px;color:var(--text-secondary);">' + j.matched.length + ' of ' + total + ' required skills matched from your profile</div></div></div>';
+  // Matched skills
+  html += '<div style="margin-bottom:20px;">' +
+    '<h4 style="font-size:13px; font-weight:700; color:var(--green); margin-bottom:10px;"><i data-lucide="check-circle" style="width:14px;height:14px;vertical-align:-2px;margin-right:6px;"></i>Your Matched Skills (' + j.matched.length + ')</h4>' +
+    '<div style="display:flex; flex-wrap:wrap; gap:6px;">';
+  j.matched.forEach(function(s) {
+    html += '<span class="job-tag match">' + s + '</span>';
+  });
+  html += '</div></div>';
+  // Skill gaps
+  if (j.gaps.length) {
+    html += '<div style="margin-bottom:24px;">' +
+      '<h4 style="font-size:13px; font-weight:700; color:var(--orange); margin-bottom:10px;"><i data-lucide="alert-circle" style="width:14px;height:14px;vertical-align:-2px;margin-right:6px;"></i>Skills to Develop (' + j.gaps.length + ')</h4>' +
+      '<div style="display:flex; flex-wrap:wrap; gap:6px;">';
+    j.gaps.forEach(function(s) {
+      html += '<span class="job-tag gap">' + s + '</span>';
+    });
+    html += '</div></div>';
+  }
+  html += '<div style="display:flex; gap:12px;">' +
+    '<button class="btn-primary" onclick="alert(\'This is a demo \u2014 in the live version you would apply directly.\')">Apply Now</button>' +
+    '<button class="btn-primary" style="background:transparent;border:1.5px solid var(--border);color:var(--text-primary);" onclick="alert(\'Saved! You\\\'ll be notified of similar roles.\')">Save Job</button></div>';
+  document.getElementById('job-detail-content').innerHTML = html;
+  document.getElementById('job-detail-overlay').classList.add('show');
+  lucide.createIcons();
+}
+function closeJobDetail() {
+  document.getElementById('job-detail-overlay').classList.remove('show');
+}
+
+/* Browse All Jobs table data */
+var browseJobsData = [
+  { title: 'Electrical Trainees', company: 'Ecovolt Innovations Ltd', sector: 'Construction', domain: 'Electricity, Gas & AC Supply', province: 'Western', type: 'Internship', posted: '1 Mar 2026', skills: ['solar energy','work efficiently','motivate others','design electronic systems','design circuits using CAD','ICT system programming','maintain solar energy systems','electrical engineering'] },
+  { title: 'Electrician', company: 'Silverlands Agriculture Services', sector: 'Agriculture, Forestry & Fishing', domain: 'Electricity, Gas & AC Supply', province: 'Central', type: 'Full-time', posted: '12 Mar 2026', skills: [] },
+  { title: 'Electrician Wanted', company: 'Forlan Hire Limited', sector: 'Human Health & Social Work', domain: 'Electricity, Gas & AC Supply', province: 'Lusaka', type: 'Full-time', posted: '1 Mar 2026', skills: ['identify talent','repair vehicle electrical systems','inspect for faults in the vehicle\'s electric system','write English','develop reporting software'] },
+  { title: 'Electrical Technician', company: 'Silondwa Engineering Ltd', sector: 'Construction', domain: 'Electricity, Gas & AC Supply', province: 'Copperbelt', type: 'Contract', posted: '19 Feb 2026', skills: ['use specialised tools in electric repairs','develop preventive maintenance procedures for instruments','manufacturing plant equipment','maintain electrical equipment','solve problems','technical drawings'] },
+  { title: 'Electrician', company: 'Handyman\'s Lime Ltd', sector: 'Mining & Quarrying', domain: 'Electricity, Gas & AC Supply', province: 'Copperbelt', type: 'Contract', posted: '24 Feb 2026', skills: ['marketing management','mining engineering','lead a team','automation technology'] },
+  { title: 'Assistant Miller & Milling Electrician', company: 'Kings Chemicals Limited', sector: 'Manufacturing', domain: 'Manufacturing', province: 'Lusaka', type: 'Full-time', posted: '14 Mar 2026', skills: ['milling machines','grade wheat for milling','monitor manufacturing quality standards','supervision of persons','design electrical systems','maintenance operations','ensure equipment maintenance','communication','teamwork principles','work in shifts'] },
+  { title: 'Auto Electrician', company: 'Andaxin Intl. Logistics', sector: 'Transportation & Storage', domain: 'Electricity, Gas & AC Supply', province: 'Copperbelt', type: 'Full-time', posted: '25 Feb 2026', skills: [] },
+  { title: 'Instrumentation Technician', company: 'Silondwa Engineering Ltd', sector: 'Construction', domain: 'Construction', province: 'Copperbelt', type: 'Contract', posted: '26 Feb 2026', skills: ['develop calibration procedures','agree on repair arrangements','inspect industrial equipment','advise on equipment maintenance','develop measuring equipment','perform maintenance on installed equipment','solve problems','maintain air conditioning systems','develop preventive maintenance procedures for instruments','manage air quality'] },
+  { title: 'TLB Operator', company: 'Goldenlay Agri Limited', sector: 'Agriculture, Forestry & Fishing', domain: 'Agriculture, Forestry & Fishing', province: 'Copperbelt', type: 'Contract', posted: '11 Mar 2026', skills: ['design safety equipment','work in outdoor conditions','mechanical tools','maintain physical fitness','work in inclement conditions','protective safety equipment','coordinate communication within a team','manage time'] },
+  { title: 'Mining Engineer', company: 'Musulumba Investments', sector: 'Mining & Quarrying', domain: 'Mining & Quarrying', province: 'Southern', type: 'Full-time', posted: '10 Mar 2026', skills: ['place gypsum blocks'] },
+  { title: 'Canteen Cook', company: 'Zambeef Products PLC', sector: 'Manufacturing', domain: 'Accommodation & Food Service', province: 'Copperbelt', type: 'Contract', posted: '18 Mar 2026', skills: [] },
+  { title: 'Cashier / Storeperson / Tyre Fitter', company: 'Tyre-King Enterprises Ltd', sector: 'Wholesale & Retail Trade', domain: 'Manufacturing', province: 'Multiple', type: 'Full-time', posted: '11 Mar 2026', skills: [] },
+  { title: 'Key Account Supervisor', company: 'Zalawi Haulage Limited', sector: 'Transportation & Storage', domain: 'Transportation & Storage', province: 'Copperbelt', type: 'Full-time', posted: '5 Mar 2026', skills: ['perform loading and unloading operations','perform resource planning','manage vehicle fleet','solution deployment','advanced driver assistant systems','geographical routes','monitor customer behaviour','monitor vehicle fleet operations','follow reporting procedures','maintain vehicle delivery documentation','customer relationship management','communicate with customer service department','identify clients\' needs','track shipments','drive vehicles','ensure compliance with policies','lead a team','plan the work of teams and individuals','supervise staff','manage a team','communication','have computer literacy','provide high quality customer service'] },
+  { title: 'Housekeeper', company: 'ACAMM\'s Lodge Company', sector: 'Accommodation & Food Service', domain: 'Accommodation & Food Service', province: 'Western', type: 'Full-time', posted: '11 Mar 2026', skills: ['supervise housekeeping operations','meet commitments in hospitality','demonstrate trustworthiness','attend to detail','apply various lifting techniques'] },
+  { title: 'IT Sales Support', company: 'NetOne', sector: 'Information & Communication', domain: 'Information & Communication', province: 'Copperbelt', type: 'Full-time', posted: '17 Mar 2026', skills: [] },
+  { title: 'Financial Investment Sales Advisor', company: 'Prudential Life Assurance', sector: 'Financial & Insurance Activities', domain: 'Financial & Insurance Activities', province: 'Copperbelt', type: 'Full-time', posted: '15 Mar 2026', skills: [] },
+  { title: 'Female Lodge Receptionist', company: 'Techshield', sector: 'Human Health & Social Work', domain: 'Accommodation & Food Service', province: 'Eastern', type: 'Full-time', posted: '9 Mar 2026', skills: ['provide high quality customer service','manage guest support services','make reservations','manage front operations','greet guests','comply with checklists','arrange bookings','supervise housekeeping operations','process payments','check deliveries on receipt','maintain financial records','provide tourism related information','maintain reception area','prioritise emergencies','observe confidentiality'] },
+  { title: 'Assistant Accountant', company: 'Eastern Water & Sanitation Co.', sector: 'Professional, Scientific & Technical', domain: 'Professional, Scientific & Technical', province: 'Eastern', type: 'Full-time', posted: '25 Feb 2026', skills: ['ensure sanitation','accounting','prepare financial statements','examine budgets','use word processing software','use spreadsheets software','perform clerical duties','handle financial transactions'] },
+  { title: 'Stores Officer', company: 'Stenson Industries', sector: 'Administrative & Support Services', domain: 'Wholesale & Retail Trade', province: 'Northern', type: 'Full-time', posted: '19 Feb 2026', skills: ['oversee equipment operation','perform warehousing operations','advise on efficiency improvements','maintain stock control systems','ensure compliance with company regulations','manage inventory','conduct financial audits','oversee logistics of finished products','train staff in quality procedures','prepare purchasing reportings','ensure compliance with safety legislation','use a warehouse management system','carry out inventory planning','communication'] },
+  { title: 'Risk & Compliance Officer', company: 'GIGX Technologies Ltd', sector: 'Other Service Activities', domain: 'Administrative & Support Services', province: 'National/Remote', type: 'Full-time', posted: '5 Mar 2026', skills: ['attend to detail','ensure compliance with healthcare regulations','manage commercial risks','ensure compliance with policies','prepare audit activities','comply with regulations','conduct financial audits','trace financial transactions','identify suspicious behaviour','prepare licence agreements','provide advice on breaches of regulation','prepare compliance documents','liaise with managers'] },
+  { title: 'Trainee Mechanical Fitters x10', company: 'Strongpak Limited', sector: 'Manufacturing', domain: 'Manufacturing', province: 'Copperbelt', type: 'Full-time', posted: '16 Mar 2026', skills: ['physics','interact verbally in English','have a high level of safety awareness','teamwork principles','communication','deal with pressure from unexpected circumstances'] },
+  { title: 'Geologist', company: 'Olinda Minerals Limited', sector: 'Mining & Quarrying', domain: 'Mining & Quarrying', province: 'Southern', type: 'Contract', posted: '23 Feb 2026', skills: [] },
+  { title: 'Chef', company: 'Bushfire', sector: 'Human Health & Social Work', domain: 'Accommodation & Food Service', province: 'North Western', type: 'Contract', posted: '4 Mar 2026', skills: [] },
+  { title: 'Human Resource Officer', company: 'Bangweulu Wetlands', sector: 'Other Service Activities', domain: 'Administrative & Support Services', province: 'Muchinga', type: 'Contract', posted: '14 Mar 2026', skills: ['human resource management','human resources department processes','recruit personnel','personnel management','maintain professional records','communication','ensure compliance with company regulations','carry out recruiting services','interview people','maintain database','introduce new employees','manage payroll','motivate employees','conduct fact finding','follow reporting procedures'] },
+  { title: 'Trainee Accountant', company: 'NCCL, OLAM', sector: 'Professional, Scientific & Technical', domain: 'Professional, Scientific & Technical', province: 'Northern', type: 'Contract', posted: '5 Mar 2026', skills: ['motivate others','personal development','accounting','create a financial report','prepare financial statements','maintain financial records','manage administrative systems','ensure compliance with policies','think analytically','attend to detail','teamwork principles','use spreadsheets software'] },
+  { title: 'Community Development Facilitator', company: 'Plan International Zambia', sector: 'Other Service Activities', domain: 'Other Service Activities', province: 'Luapula', type: 'Temporary', posted: '18 Mar 2026', skills: [] },
+  { title: 'Station Supervisor / Plant Supervisor', company: 'Eastern Water & Sanitation Co.', sector: 'Water Supply, Sewerage & Waste', domain: 'Water Supply, Sewerage & Waste', province: 'Eastern', type: 'Full-time', posted: '10 Mar 2026', skills: ['English','supervise waste water treatments','perform water treatment procedures'] },
+  { title: 'Performance Analyst', company: 'MTN Zambia', sector: 'Information & Communication', domain: 'Information & Communication', province: 'Lusaka', type: 'Full-time', posted: '23 Mar 2026', skills: [] },
+  { title: 'Transport & Logistics Officer', company: 'Minshen Industry Co. Ltd', sector: 'Transportation & Storage', domain: 'Transportation & Storage', province: 'Lusaka', type: 'Contract', posted: '16 Mar 2026', skills: ['manage company transport strategy','supply chain management','office administration','analyse transport studies','use fleet management system','logistics','manage fuelling system','execute vehicle maintenance','plan transport operations','analyse transportation costs','use microsoft office','use spreadsheets software','promote organisational communication','develop personal skills','multimodal transport logistics'] },
+  { title: 'Automotive Electrician', company: 'Stanley Kabengele', sector: 'Mining & Quarrying', domain: 'Electricity, Gas & AC Supply', province: 'Copperbelt', type: 'Full-time', posted: '19 Feb 2026', skills: ['electrical machines','develop preventive maintenance procedures for instruments','manage heavy equipment','order equipment','use word processing software'] }
+];
+
+function renderBrowseJobs(data) {
+  var tbody = document.getElementById('browse-jobs-tbody');
+  if (!data.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-secondary);">No jobs match your filters.</td></tr>'; return; }
+  tbody.innerHTML = data.map(function(j, i) {
+    return '<tr style="cursor:pointer;" onclick="openBrowseJobDetail(' + i + ')" data-browse-idx="' + i + '"><td><span class="name-link">' + j.title + '</span></td><td>' + j.company + '</td><td>' + j.sector + '</td><td>' + j.domain + '</td><td>' + j.province + '</td><td style="white-space:nowrap;">' + j.type + '</td><td style="white-space:nowrap;">' + j.posted + '</td></tr>';
+  }).join('');
+  // Store filtered data reference for click handler
+  window._filteredBrowseJobs = data;
+}
+
+function openBrowseJobDetail(idx) {
+  var j = window._filteredBrowseJobs[idx];
+  var html = '<div style="margin-bottom:20px;">' +
+    '<h3 style="font-size:20px; margin-bottom:4px;">' + j.title + '</h3>' +
+    '<p style="font-size:14px; color:var(--text-secondary);">' + j.company + '</p>' +
+    '<div style="display:flex; flex-wrap:wrap; gap:16px; margin-top:10px; font-size:12px; color:var(--text-secondary);">' +
+    '<span>' + j.type + '</span><span>Posted ' + j.posted + '</span><span>' + j.province + '</span></div>' +
+    '<div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:10px; font-size:12px; color:var(--text-secondary);">' +
+    '<span><strong>Sector:</strong> ' + j.sector + '</span><span><strong>Work Domain:</strong> ' + j.domain + '</span></div>' +
+    '</div>';
+  if (j.skills && j.skills.length) {
+    html += '<h4 style="font-size:14px; margin-bottom:12px;">Extracted Skills (' + j.skills.length + ')</h4>' +
+      '<div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:24px;">';
+    j.skills.forEach(function(s) {
+      html += '<span class="job-tag" style="background:var(--green-bg);color:var(--green);">' + s + '</span>';
+    });
+    html += '</div>';
+  } else {
+    html += '<p style="font-size:13px; color:var(--text-secondary); margin-bottom:24px; font-style:italic;">No skills extracted for this posting yet.</p>';
+  }
+  html += '<div style="display:flex; gap:12px;">' +
+    '<button class="btn-primary" onclick="alert(\'This is a demo \u2014 in the live version you would apply directly.\')">Apply Now</button>' +
+    '<button class="btn-primary" style="background:transparent;border:1.5px solid var(--border);color:var(--text-primary);" onclick="alert(\'Saved! You\\\'ll be notified of similar roles.\')">Save Job</button></div>';
+  document.getElementById('job-detail-content').innerHTML = html;
+  document.getElementById('job-detail-overlay').classList.add('show');
+  lucide.createIcons();
+}
+
+function filterBrowseJobs() {
+  var search = document.getElementById('browse-search').value.toLowerCase();
+  var sector = document.getElementById('browse-sector').value;
+  var domain = document.getElementById('browse-domain').value;
+  var province = document.getElementById('browse-province').value;
+  var type = document.getElementById('browse-type').value;
+  var filtered = browseJobsData.filter(function(j) {
+    if (search && j.title.toLowerCase().indexOf(search) === -1 && j.company.toLowerCase().indexOf(search) === -1) return false;
+    if (sector && j.sector !== sector) return false;
+    if (domain && j.domain !== domain) return false;
+    if (province && j.province !== province) return false;
+    if (type && j.type !== type) return false;
+    return true;
+  });
+  renderBrowseJobs(filtered);
+}
+
+// Initial render
+renderBrowseJobs(browseJobsData);
 
 function goHome() {
   if (currentRole === 'staff') {
